@@ -17,11 +17,11 @@ class DCAExample(ScriptStrategyBase):
     This example shows how to set up a simple strategy to buy a token on fixed (dollar) amount on a regular basis
     """
     #: Define markets to instruct Hummingbot to create connectors on the exchanges and markets you need
-    markets = {"binance_paper_trade": {"BTC-USDT"}}
+    markets = {"gate_io": {"SHFT-USDT"}}
     #: The last time the strategy places a buy order
     last_ordered_ts = 0.
     #: Buying interval (in seconds)
-    buy_interval = 10.
+    buy_interval = 60.
     #: Buying amount (in dollars - USDT)
     buy_quote_amount = Decimal("100")
 
@@ -29,9 +29,9 @@ class DCAExample(ScriptStrategyBase):
         # Check if it is time to buy
         if self.last_ordered_ts < (self.current_timestamp - self.buy_interval):
             # Lets set the order price to the best bid
-            price = self.connectors["binance_paper_trade"].get_price("BTC-USDT", False)
+            price = self.connectors["gate_io"].get_price("SHFT-USDT", False)
             amount = self.buy_quote_amount / price
-            self.buy("binance_paper_trade", "BTC-USDT", amount, OrderType.LIMIT, price)
+            self.buy("gate_io ", "SHFT-USDT", amount, OrderType.LIMIT, price)
             self.last_ordered_ts = self.current_timestamp
 
     def did_create_buy_order(self, event: BuyOrderCreatedEvent):
